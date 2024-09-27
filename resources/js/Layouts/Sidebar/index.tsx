@@ -6,6 +6,7 @@ import SidebarItem from "@/Layouts/Sidebar/SidebarItem";
 import ClickOutside from "@/Components/ClickOutside";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import ApplicationLogo from "@/Components/ApplicationLogo";
+import { Image } from "@nextui-org/react";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -207,9 +208,15 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         }`}
       >
         {/* <!-- SIDEBAR HEADER --> */}
-        <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5 xl:py-10">
+        <div className="flex items-center justify-between gap-2 px-6 py-2 lg:py-2 xl:py-2">
           <Link href="/">
-            <ApplicationLogo/>
+            
+            <Image
+                width={100}
+                height={80}
+                src={"/Images/logo/logo.jpg"}
+                alt="Logo"
+              />
           </Link>
 
           <button

@@ -1,8 +1,11 @@
 import { Productitem } from "@/types";
 import SellAction from "./SellAction";
 import CourierAction from "./CourierAction";
-import BadAction from "./CourierAction";
+import BadAction from "./BadAction";
 import { Link } from "@nextui-org/react";
+import TransferAction from "./TransferAction";
+import ReturnAction from "./ReturnAction";
+import ReplaceAction from "./ReplaceAction";
 
 export default function Actions({ item }: { item: Productitem }) {
     return (
@@ -10,16 +13,9 @@ export default function Actions({ item }: { item: Productitem }) {
             <SellAction />
             <CourierAction />
             <BadAction />
-            <Link href="#" as="button"></Link>
-            <Link href="#" as="button">
-                Transfer
-            </Link>
-            <Link href="#" as="button">
-                Replace
-            </Link>
-            <Link href="#" as="button">
-                Transfer to other shop
-            </Link>
+            <TransferAction />
+            <ReturnAction />
+            <ReplaceAction />
         </div>
     );
 }

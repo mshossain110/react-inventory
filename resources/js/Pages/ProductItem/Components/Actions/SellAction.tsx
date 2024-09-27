@@ -9,6 +9,7 @@ import {
     useDisclosure,
     Input,
 } from "@nextui-org/react";
+import { ChangeEvent } from "react";
 type SellForm = {
     sell_price: number;
     benefit: number;
@@ -21,7 +22,7 @@ export default function SellAction() {
         benefit: 0,
         invoice: 0,
     });
-    const setSellPrice = (e) => {
+    const setSellPrice = (e: ChangeEvent<HTMLInputElement>) => {
         setData("sell_price", parseInt(e.target.value));
     };
 

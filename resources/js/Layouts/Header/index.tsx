@@ -12,8 +12,8 @@ const Header = (props: {
   const pageTitle = usePage<PageProps>().props.meta?.pageTitle ?? 'Dashboard';
 
   return (
-    <header className="sticky top-0 z-999 flex w-full border-b border-stroke bg-white dark:border-stroke-dark dark:bg-gray-dark">
-      <div className="flex flex-grow items-center justify-between px-4 py-5 shadow-2 md:px-5 2xl:px-10">
+    <header className="sticky top-0 z-[100] flex w-full border-b border-stroke bg-white dark:border-stroke-dark dark:bg-gray-dark">
+      <div className="flex flex-grow items-center justify-between px-4 py-2 shadow-2 md:px-5 2xl:px-10">
         <div className="flex items-center gap-2 sm:gap-4 lg:hidden">
           {/* <!-- Hamburger Toggle BTN --> */}
           <button
@@ -62,7 +62,7 @@ const Header = (props: {
             <Image
               width={32}
               height={32}
-              src={"/images/logo/logo-icon.svg"}
+              src={"/Images/logo/logo.jpg"}
               alt="Logo"
             />
           </Link>
@@ -78,9 +78,6 @@ const Header = (props: {
 
         <div className="flex items-center justify-normal gap-2 2xsm:gap-4 lg:w-full lg:justify-between xl:w-auto xl:justify-normal">
           <ul className="flex items-center gap-2 2xsm:gap-4">
-            {/* <!-- Search Form --> */}
-            <SearchForm />
-            {/* <!-- Search Form --> */}
 
             {/* <!-- Dark Mode Toggle --> */}
             <DarkModeSwitcher />

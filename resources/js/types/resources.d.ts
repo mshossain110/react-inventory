@@ -18,6 +18,7 @@ export interface Company extends Base {
     logo?: string;
     product_visibilty?: boolean;
     manager?: User;
+    warehouses?: Warehouse[]
 }
 
 export interface Warehouse extends Base {

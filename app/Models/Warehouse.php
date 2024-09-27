@@ -29,7 +29,22 @@ class Warehouse extends Model
         'name',
         'mobile_number',
         'address',
+        'company_id'
     ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
+    }
 
 
     public function supervisor(): BelongsTo
@@ -40,5 +55,10 @@ class Warehouse extends Model
     public function items(): HasMany
     {
         return $this->hasMany(ProductItem::class);
+    }
+
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
     }
 }

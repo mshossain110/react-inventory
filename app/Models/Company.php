@@ -41,6 +41,20 @@ class Company extends Model
         'product_visibilty',
     ];
 
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
+    }
+
     public function manager(): BelongsTo
     {
         return $this->belongsTo(User::class);
