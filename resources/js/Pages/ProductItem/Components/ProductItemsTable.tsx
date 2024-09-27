@@ -11,7 +11,7 @@ import {
     Tooltip,
     getKeyValue,
 } from "@nextui-org/react";
-import { Productitem } from "@/types";
+import { Productitem, productTable } from "@/types";
 import Actions from "./Actions/Actions";
 
 const statusColorMap = {
@@ -20,7 +20,7 @@ const statusColorMap = {
     courier: "warning",
 };
 
-export default function ProductItemsTable({ items }: { items: Productitem[] }) {
+export default function ProductItemsTable({ items }: { items: productTable[] }) {
     const columns = [
         { name: "Model", uid: "name" },
         { name: "Buy Price", uid: "buy_price" },
@@ -28,13 +28,13 @@ export default function ProductItemsTable({ items }: { items: Productitem[] }) {
         { name: "", uid: "actions" },
     ];
     const renderCell = React.useCallback<
-        (item: Productitem, columnKey: string | number) => any
+        (item: productTable, columnKey: string | number) => any
     >((item, columnKey) => {
         const cellValue = item[columnKey];
 
         switch (columnKey) {
             case "name":
-                return item.product?.name;
+                return item.name;
 
             case "status":
                 return (

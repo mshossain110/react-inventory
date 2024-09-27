@@ -36,7 +36,6 @@ export interface Provider extends Base {
 }
 
 export interface Product extends Base {
-    id: number;
     category_id: number;
     name: string;
     slug: string;
@@ -50,7 +49,6 @@ export interface Product extends Base {
 }
 
 export interface Productitem extends Base {
-    id: number;
     identity?: string;
     status: string;
     buy_price: number;
@@ -67,3 +65,5 @@ export interface Applog extends Base {
     user: User;
     company: Company;
 }
+
+export type productTable = Omit<Product, 'productItems'> & Omit<Productitem, 'provider' | 'warehouse' | 'product'>

@@ -22,7 +22,11 @@ Route::middleware(['auth', 'verified'])->group(function() {
     })->name('dashboard');
 
     Route::resource('companies', CompanyController::class);
-    Route::get('product-items', [ProductItemController::class, 'index'])->name('product-item');
+    Route::get('product-items/current', [ProductItemController::class, 'current'])->name('product-item.current');
+    Route::get('product-items/available', [ProductItemController::class, 'available'])->name('product-item.available');
+    Route::get('product-items/courier', [ProductItemController::class, 'courier'])->name('product-item.courier');
+    Route::get('product-items/bad', [ProductItemController::class, 'bad'])->name('product-item.bad');
+    Route::get('product-items/sold', [ProductItemController::class, 'sold'])->name('product-item.sold');
 });
 
 Route::middleware('auth')->group(function () {

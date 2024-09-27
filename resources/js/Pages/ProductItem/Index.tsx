@@ -1,13 +1,13 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
-import { PageProps, Product, Productitem } from "@/types";
+import { PageProps, Product, Productitem, productTable } from "@/types";
 import ProductItemsTable from './Components/ProductItemsTable';
 import FilterCard from "./Components/FilterCard";
 
 export default function Index({
     auth,
     items,
-}: PageProps<{ items: Productitem[] }>)
+}: PageProps<{ items: productTable[] }>)
 {
 
     return (

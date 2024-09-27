@@ -3,16 +3,79 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
+use App\Models\Company;
 use App\Models\Product;
+use App\Models\Warehouse;
 use App\Models\ProductItem;
 use Illuminate\Http\Request;
 use App\Enums\ProductItemStatusesEnum;
 use App\Http\Requests\StoreProductItemRequest;
 use App\Http\Requests\UpdateProductItemRequest;
 use Illuminate\Contracts\Database\Query\Builder;
+use App\Actions\ProductActions\GetProductItemsAction;
 
 class ProductItemController extends Controller
 {
+    public function current(Request $request)
+    {
+        $warehouses = [1];
+        $statuses = [ProductItemStatusesEnum::AVAILAVLE, ProductItemStatusesEnum::BAD];
+        $search = $request->get('search');
+
+        $products = (new GetProductItemsAction())->statues($statuses)->warehouse($warehouses)->search($search)->get();
+
+        return Inertia::render('ProductItem/Index', [
+            'items' => $products
+        ]);
+    }
+    public function available(Request $request)
+    {
+        $warehouses = Warehouse::select('id')->where('company_id', 1)->get()->unique()->toArray();
+        $statuses = [ProductItemStatusesEnum::AVAILAVLE];
+        $search = $request->get('search');
+
+        $products = app(GetProductItemsAction::class)->statues($statuses)->warehouse($warehouses)->search($search)->get();
+
+        return Inertia::render('ProductItem/Index', [
+            'items' => $products
+        ]);
+    }
+    public function courier(Request $request)
+    {
+        $warehouses = Warehouse::select('id')->where('company_id', 1)->get()->unique()->toArray();
+        $statuses = [ProductItemStatusesEnum::COURIER];
+        $search = $request->get('search');
+
+        $products = app(GetProductItemsAction::class)->statues($statuses)->warehouse($warehouses)->search($search)->get();
+
+        return Inertia::render('ProductItem/Index', [
+            'items' => $products
+        ]);
+    }
+    public function bad(Request $request)
+    {
+        $warehouses = Warehouse::select('id')->where('company_id', 1)->get()->unique()->toArray();
+        $statuses = [ProductItemStatusesEnum::BAD];
+        $search = $request->get('search');
+
+        $products = app(GetProductItemsAction::class)->statues($statuses)->warehouse($warehouses)->search($search)->get();
+
+        return Inertia::render('ProductItem/Index', [
+            'items' => $products
+        ]);
+    }
+    public function sold(Request $request)
+    {
+        $warehouses = Warehouse::select('id')->where('company_id', 1)->get()->unique()->toArray();
+        $statuses = [ProductItemStatusesEnum::SOLD];
+        $search = $request->get('search');
+
+        $products = app(GetProductItemsAction::class)->statues($statuses)->warehouse($warehouses)->search($search)->get();
+
+        return Inertia::render('ProductItem/Index', [
+            'items' => $products
+        ]);
+    }
     /**
      * Display a listing of the resource.
      */
