@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('logo')->nullable();
             $table->foreignId('company_id')->nullable()->index()->constrained('companies', 'id')->nullOnDelete();
             $table->foreignId('supervisor')->nullable()->index()->constrained('users', 'id')->nullOnDelete();
+            $table->bigInteger('sell_target')->default(0);
+            $table->bigInteger('profit_target')->default(0);
             $table->timestamps();
         });
     }

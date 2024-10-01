@@ -1,14 +1,22 @@
-import React from "react";
+import React, { MouseEventHandler, useState } from "react";
 import { Link } from '@inertiajs/react';
 import SidebarDropdown from "@/Layouts/Sidebar/SidebarDropdown";
 
 const SidebarItem = ({ item }: any) => {
-  const isAcive = ! item.children.some((i) => i.active == true )
+  const [visibleChile, setVisibleChile] = useState(false)
+  const isAcive = item.children.some((i) => i.active == true )
+
+  const handleClick: MouseEventHandler = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    setVisibleChile(!visibleChile);
+  }
+
   return (
     <>
       <li>
         <Link
-          href={item.route}
+          onClick={handleClick}
+          href="#"
           className={`${isAcive ? "bg-primary/[.07] text-primary dark:bg-white/10 dark:text-white" : "text-dark-4 hover:bg-gray-2 hover:text-dark dark:text-gray-5 dark:hover:bg-white/10 dark:hover:text-white"} group relative flex items-center gap-3 rounded-[7px] px-3.5 py-3 font-medium duration-300 ease-in-out`}
         >
           {item.icon}
@@ -16,7 +24,7 @@ const SidebarItem = ({ item }: any) => {
           {item.children && (
             <svg
               className={`absolute right-3.5 top-1/2 -translate-y-1/2 fill-current ${
-                isAcive && "rotate-180"
+                !(isAcive || visibleChile) && "rotate-180"
               }`}
               width="22"
               height="22"
@@ -37,7 +45,7 @@ const SidebarItem = ({ item }: any) => {
         {item.children && (
           <div
             className={`translate transform overflow-hidden ${
-              isAcive && "hidden"
+              !(isAcive || visibleChile) && "hidden"
             }`}
           >
             <SidebarDropdown item={item.children} />

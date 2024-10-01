@@ -21,12 +21,18 @@ const statusColorMap = {
 };
 
 export default function ProductItemsTable({ items }: { items: productTable[] }) {
+    const isCurrent = route().current('product-item.current');
     const columns = [
         { name: "Model", uid: "name" },
         { name: "Buy Price", uid: "buy_price" },
         { name: "Status", uid: "status" },
         { name: "", uid: "actions" },
     ];
+
+    if (! isCurrent) {
+        columns.splice(2, 0, { name: "Warehouse", uid: "warehouse_name" })
+    }
+
     const renderCell = React.useCallback<
         (item: productTable, columnKey: string | number) => any
     >((item, columnKey) => {

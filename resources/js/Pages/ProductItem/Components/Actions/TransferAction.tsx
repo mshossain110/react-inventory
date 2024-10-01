@@ -13,7 +13,7 @@ import {
 type badFrom = {
     warehouse: number;
 };
-export default function TransferAction() {
+export default function TransferAction({ item }: { item: Productitem }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
     const { data, setData, post, processing, errors } = useForm<badFrom>(
@@ -51,7 +51,7 @@ export default function TransferAction() {
                                     color="primary"
                                     type="submit"
                                 >
-                                    Bad
+                                    Transfer
                                 </Button>
                             </ModalFooter>
                         </form>

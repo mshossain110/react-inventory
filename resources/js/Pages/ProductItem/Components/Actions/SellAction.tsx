@@ -1,4 +1,5 @@
-import { useForm } from "@inertiajs/react";
+import { router, useForm } from "@inertiajs/react";
+import { productTable } from "@/types";
 import {
     Modal,
     ModalContent,
@@ -9,22 +10,36 @@ import {
     useDisclosure,
     Input,
 } from "@nextui-org/react";
-import { ChangeEvent } from "react";
+import axios from "axios";
+import { FormEvent, useCallback } from "react";
 type SellForm = {
     sell_price: number;
-    benefit: number;
+    profit: number;
     invoice: number;
 };
-export default function SellAction() {
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const { data, setData, post, processing, errors } = useForm<SellForm>({
+export default function SellAction({ item }: { item: productTable }) {
+    const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
+    const defaultData = {
         sell_price: 0,
-        benefit: 0,
+        profit: 0,
         invoice: 0,
-    });
-    const setSellPrice = (e: ChangeEvent<HTMLInputElement>) => {
-        setData("sell_price", parseInt(e.target.value));
-    };
+    }
+    const { data, setData, post, processing, errors } = useForm<SellForm>(defaultData);
+
+    const handelSellPirce = useCallback((sell: number) => {
+        setData( { ...defaultData, ...{sell_price: sell, profit: (sell - item.buy_price)} });
+    }, [])
+
+
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        axios.put(route('api.product-item.actions.sold', {id: item.id}), data)
+            .then(res => {
+                onClose()
+                router.reload()
+            })
+    }
 
     return (
         <>
@@ -34,30 +49,37 @@ export default function SellAction() {
             <Modal radius="none" isOpen={isOpen} onOpenChange={onOpenChange}>
                 <ModalContent>
                     {(onClose) => (
-                        <form>
+                        <form onSubmit={handleSubmit}>
                             <ModalHeader className="flex flex-col gap-1">
                                 New Sell
                             </ModalHeader>
                             <ModalBody>
+                                <div>
+                                    <p>Item: {item.name}</p>
+                                    <p>Buying Price: {item.buy_price}</p>
+                                    <p>Identity: {item.identity}</p>
+                                </div>
                                 <Input
                                     id="sell_price"
                                     name="sell_price"
                                     label="Sell Price"
                                     type="number"
                                     radius="none"
-                                    onChange={setSellPrice}
+                                    value={data.sell_price.toString()}
+                                    onChange={(e) => handelSellPirce(parseInt(e.target.value))}
                                     isRequired
                                 />
 
                                 <Input
-                                    id="benefit"
-                                    name="benefit"
-                                    label="Benefit"
+                                    id="profit"
+                                    name="profit"
+                                    label="Profit"
                                     type="number"
                                     radius="none"
+                                    value={data.profit.toString()}
                                     onChange={(e) =>
                                         setData(
-                                            "benefit",
+                                            "profit",
                                             parseInt(e.target.value)
                                         )
                                     }
@@ -75,7 +97,6 @@ export default function SellAction() {
                                             parseInt(e.target.value)
                                         )
                                     }
-                                    isRequired
                                 />
                             </ModalBody>
                             <ModalFooter>

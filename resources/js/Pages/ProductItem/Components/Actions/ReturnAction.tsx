@@ -1,4 +1,5 @@
 import { useForm } from "@inertiajs/react";
+import { Productitem } from "@/types";
 import {
     Modal,
     ModalContent,
@@ -13,7 +14,7 @@ type badFrom = {
     note: string;
     warehouse: number;
 };
-export default function ReturnAction() {
+export default function ReturnAction({ item }: { item: Productitem }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const { data, setData, post, processing, errors } = useForm<badFrom>({
         note: '',

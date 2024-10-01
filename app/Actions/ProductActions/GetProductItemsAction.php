@@ -13,7 +13,8 @@ class GetProductItemsAction
     public function __construct() {
         $this->productQuery = DB::table('products')
             ->join('product_items', 'product_items.product_id', '=', 'products.id')
-            ->select(['products.*', 'product_items.*']);
+            ->join('warehouses', 'warehouses.id', '=', 'product_items.warehouse_id')
+            ->selectRaw('product_items.*, products.name, products.slug, products.category_id, warehouses.name as warehouse_name');
     }
     
     public function statues(array $statues)

@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\LogTypeEnum;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @property int $id
@@ -28,7 +31,32 @@ class Applog extends Model
      */
     protected $fillable = [
         'log',
+        'log_type',
     ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'log' => 'array',
+            'log_type' => LogTypeEnum::class
+        ];
+    }
+
+        /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        static::creating(function (Applog $log) {
+            $log->user_id = Auth::user()->id;
+            $log->company_id = Auth::user()->company_id?: 1;
+        });
+    }
 
     public function user(): BelongsTo
     {
@@ -38,6 +66,14 @@ class Applog extends Model
     public function company(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the parent commentable model
+     */
+    public function logable(): MorphTo
+    {
+        return $this->morphTo();
     }
 
 }

@@ -8,15 +8,24 @@ import {
     ListboxSection,
 } from "@nextui-org/react";
 import axios from "axios";
-import React, { EventHandler, useEffect, useState } from "react";
+import React, { EventHandler, useEffect, useMemo, useState } from "react";
 
-export default function WarehouseSelect({warehouse, setWarehouse}: { warehouse: number; setWarehouse: React.ChangeEventHandler<HTMLSelectElement>}) {
-    const [warehouses, setWarehouses] = useState<Company[]>([]);
+export default function WarehouseSelect(
+    {warehouse, setWarehouse}: { warehouse: number; setWarehouse: React.ChangeEventHandler<HTMLSelectElement>}
+) {
+
+    const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
+
     useEffect(() => {
+        if (warehouses.length) {
+            return;
+        }
+
         axios
             .get("/api/warehouses")
             .then((response) => setWarehouses(response.data.data));
-    });
+
+    }, []);
 
     return (
         <Select

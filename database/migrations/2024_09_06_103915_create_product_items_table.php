@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('identity')->nullable();
             $table->unsignedInteger('buy_price')->nullable()->default(0);
             $table->unsignedInteger('sell_price')->nullable();
+            $table->unsignedInteger('profit')->default(0);
             $table->string('status', 50)->nullable()->index();
             $table->dateTime('sold_at')->nullable();
             $table->timestamps();

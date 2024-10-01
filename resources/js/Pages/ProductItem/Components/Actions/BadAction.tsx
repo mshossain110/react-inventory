@@ -1,4 +1,5 @@
-import { useForm } from "@inertiajs/react";
+import { useForm, router } from "@inertiajs/react";
+import { Productitem } from "@/types";
 import {
     Modal,
     ModalContent,
@@ -7,18 +8,29 @@ import {
     ModalFooter,
     Button,
     useDisclosure,
-    Input,
+    Textarea,
 } from "@nextui-org/react";
-type badFrom = {
+import { FormEvent } from "react";
+import axios from "axios";
+type From = {
     note: string;
-    warehouse: number;
 };
-export default function BadAction() {
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const { data, setData, post, processing, errors } = useForm<badFrom>({
+export default function BadAction({ item }: { item: Productitem }) {
+    const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
+    const { data, setData, post, processing, errors } = useForm<From>({
         note: '',
-        warehouse: 0,
     });
+
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        axios.put(route('api.product-item.actions.bad', {id: item.id}), data)
+            .then(res => {
+                onClose()
+                router.reload()
+            })
+    }
+
     return (
         <>
             <Button radius="none" size="sm" onPress={onOpen}>
@@ -27,14 +39,13 @@ export default function BadAction() {
             <Modal radius="none" isOpen={isOpen} onOpenChange={onOpenChange}>
                 <ModalContent>
                     {(onClose) => (
-                        <form>
+                        <form onSubmit={handleSubmit}>
                             <ModalHeader className="flex flex-col gap-1">
                                 Find a folt
                             </ModalHeader>
                             <ModalBody>
 
-
-                                <Input
+                                <Textarea
                                     id="note"
                                     name="note"
                                     label="Note"
@@ -48,21 +59,7 @@ export default function BadAction() {
                                         )
                                     }
                                 />
-                                <Input
-                                    id="warehouse"
-                                    name="warehouse"
-                                    label="Warehouse"
-                                    type="number"
-                                    radius="none"
-                                    isRequired
-                                    onChange={(e) =>
-                                        setData(
-                                            "warehouse",
-                                            parseInt(e.target.value)
-                                        )
-                                    }
-                                    
-                                />
+
                             </ModalBody>
                             <ModalFooter>
                                 <Button

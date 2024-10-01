@@ -4,6 +4,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ProductItemActionController;
 use App\Http\Controllers\ProductItemController;
 use App\Http\Controllers\ProfileController;
 

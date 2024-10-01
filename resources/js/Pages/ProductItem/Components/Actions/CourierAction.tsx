@@ -1,4 +1,5 @@
 import { useForm } from "@inertiajs/react";
+import { Productitem } from "@/types";
 import {
     Modal,
     ModalContent,
@@ -15,7 +16,7 @@ type SellForm = {
     invoice: number;
     courier_number?:string;
 };
-export default function CourierAction() {
+export default function CourierAction({ item }: { item: Productitem }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const { data, setData, post, processing, errors } = useForm<SellForm>({
         sell_price: 0,

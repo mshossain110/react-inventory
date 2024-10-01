@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('applogs', function (Blueprint $table) {
+        Schema::create('transections', function (Blueprint $table) {
             $table->id();
-            $table->string('log_type', 100);
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('company_id')->constrained();
-            $table->nullableMorphs('logable');
-            $table->json('log');
+            $table->string('title');
+            $table->nullableMorphs('transectable');
+            $table->unsignedBigInteger('debit')->default(0)->comment("I had given");
+            $table->unsignedBigInteger('credit')->default(0)->comment("Someone give to me");
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('applogs');
+        Schema::dropIfExists('transections');
     }
 };
