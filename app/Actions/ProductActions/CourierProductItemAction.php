@@ -51,7 +51,7 @@ class CourierProductItemAction
             $log['courier_number'] = $data['courier_number'];
 
             $productItem->logs()->create([
-                'log_type' => LogTypeEnum::SOLD_PRODUCT,
+                'log_type' => LogTypeEnum::COURIER_PRODUCT,
                 'log' => $log
             ]);
 

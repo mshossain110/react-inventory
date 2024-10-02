@@ -1,5 +1,6 @@
 import WarehouseSelect from "@/Components/WarehouseSelect";
-import { useForm } from "@inertiajs/react";
+import { productTable } from "@/types";
+import { router, useForm } from "@inertiajs/react";
 import {
     Modal,
     ModalContent,
@@ -10,17 +11,30 @@ import {
     useDisclosure,
     Input,
 } from "@nextui-org/react";
+import axios from "axios";
+import { FormEvent } from "react";
 type badFrom = {
     warehouse: number;
 };
-export default function TransferAction({ item }: { item: Productitem }) {
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+export default function TransferAction({ item }: { item: productTable }) {
+    const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
 
     const { data, setData, post, processing, errors } = useForm<badFrom>(
         {
             warehouse: 0,
         }
     );
+
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        axios
+            .put(route("api.product-item.actions.transfer", { id: item.id }), data)
+            .then((res) => {
+                onClose();
+                router.reload();
+            });
+    };
 
     return (
         <>
@@ -30,7 +44,7 @@ export default function TransferAction({ item }: { item: Productitem }) {
             <Modal radius="none" isOpen={isOpen} onOpenChange={onOpenChange}>
                 <ModalContent>
                     {(onClose) => (
-                        <form>
+                        <form onSubmit={handleSubmit}>
                             <ModalHeader className="flex flex-col gap-1">
                                 Transfer to a Warehouse
                             </ModalHeader>
@@ -38,14 +52,6 @@ export default function TransferAction({ item }: { item: Productitem }) {
                                 <WarehouseSelect warehouse={data.warehouse} setWarehouse={(e) => setData('warehouse', parseInt(e.target.value))}></WarehouseSelect>
                             </ModalBody>
                             <ModalFooter>
-                                <Button
-                                    radius="none"
-                                    color="danger"
-                                    variant="light"
-                                    onPress={onClose}
-                                >
-                                    Close
-                                </Button>
                                 <Button
                                     radius="none"
                                     color="primary"

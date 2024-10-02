@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Actions\ProductActions\BadProductItemAction;
 use App\Actions\ProductActions\SoldProductItemAction;
 use App\Actions\ProductActions\CourierProductItemAction;
+use App\Actions\ProductActions\TransferProductItemAction;
 
 class ProductItemActionController extends Controller
 {
@@ -44,5 +45,16 @@ class ProductItemActionController extends Controller
         $data = $request->all();
 
         app(BadProductItemAction::class)->excute($productItem, $data);
+    }
+
+    public function transfer(ProductItem $productItem, Request $request)
+    {
+        $request->validate([
+            'warehouse' => 'required|exists:warehouses,id'
+        ]);
+
+        $data = $request->all();
+
+        app(TransferProductItemAction::class)->excute($productItem, $data);
     }
 }
