@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->nullableMorphs('transectable');
+            $table->foreignId('warehouse_id')->index()->constrained('warehouses')->cascadeOnDelete();
             $table->unsignedBigInteger('debit')->default(0)->comment("I had given");
             $table->unsignedBigInteger('credit')->default(0)->comment("Someone give to me");
             $table->timestamps();

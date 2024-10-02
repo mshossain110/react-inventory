@@ -15,7 +15,7 @@ import { FormEvent, useCallback } from "react";
 type SellForm = {
     sell_price: number;
     profit: number;
-    invoice: number;
+    invoice?: number;
 };
 export default function SellAction({ item }: { item: productTable }) {
     const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
@@ -23,23 +23,27 @@ export default function SellAction({ item }: { item: productTable }) {
         sell_price: 0,
         profit: 0,
         invoice: 0,
-    }
-    const { data, setData, post, processing, errors } = useForm<SellForm>(defaultData);
+    };
+    const { data, setData, post, processing, errors } =
+        useForm<SellForm>(defaultData);
 
     const handelSellPirce = useCallback((sell: number) => {
-        setData( { ...defaultData, ...{sell_price: sell, profit: (sell - item.buy_price)} });
-    }, [])
-
+        setData({
+            ...defaultData,
+            ...{ sell_price: sell, profit: sell - item.buy_price },
+        });
+    }, []);
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        axios.put(route('api.product-item.actions.sold', {id: item.id}), data)
-            .then(res => {
-                onClose()
-                router.reload()
-            })
-    }
+        axios
+            .put(route("api.product-item.actions.sold", { id: item.id }), data)
+            .then((res) => {
+                onClose();
+                router.reload();
+            });
+    };
 
     return (
         <>
@@ -66,7 +70,11 @@ export default function SellAction({ item }: { item: productTable }) {
                                     type="number"
                                     radius="none"
                                     value={data.sell_price.toString()}
-                                    onChange={(e) => handelSellPirce(parseInt(e.target.value))}
+                                    onChange={(e) =>
+                                        handelSellPirce(
+                                            parseInt(e.target.value)
+                                        )
+                                    }
                                     isRequired
                                 />
 

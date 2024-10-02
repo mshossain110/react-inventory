@@ -1,23 +1,23 @@
-import { useForm, router } from "@inertiajs/react";
 import { Productitem } from "@/types";
+import { router, useForm } from "@inertiajs/react";
 import {
-    Modal,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
     Button,
-    useDisclosure,
+    Modal,
+    ModalBody,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
     Textarea,
+    useDisclosure,
 } from "@nextui-org/react";
-import { FormEvent } from "react";
 import axios from "axios";
+import { FormEvent } from "react";
 type From = {
     note: string;
 };
 export default function BadAction({ item }: { item: Productitem }) {
     const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
-    const { data, setData, post, processing, errors } = useForm<From>({
+    const { data, setData } = useForm<From>({
         note: '',
     });
 
@@ -25,7 +25,7 @@ export default function BadAction({ item }: { item: Productitem }) {
         e.preventDefault();
 
         axios.put(route('api.product-item.actions.bad', {id: item.id}), data)
-            .then(res => {
+            .then(() => {
                 onClose()
                 router.reload()
             })

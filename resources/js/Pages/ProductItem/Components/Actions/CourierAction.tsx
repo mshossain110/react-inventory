@@ -1,32 +1,54 @@
-import { useForm } from "@inertiajs/react";
-import { Productitem } from "@/types";
+import { productTable } from "@/types";
+import { router, useForm } from "@inertiajs/react";
 import {
-    Modal,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
     Button,
-    useDisclosure,
     Input,
+    Modal,
+    ModalBody,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    useDisclosure,
 } from "@nextui-org/react";
+import axios from "axios";
+import { ChangeEvent, FormEvent } from "react";
+
 type SellForm = {
     sell_price: number;
-    benefit: number;
-    invoice: number;
-    courier_number?:string;
+    profit: number;
+    invoice?: number;
+    courier_number?: string;
+    paid: number;
 };
-export default function CourierAction({ item }: { item: Productitem }) {
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+export default function CourierAction({ item }: { item: productTable }) {
+    const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
     const { data, setData, post, processing, errors } = useForm<SellForm>({
         sell_price: 0,
-        benefit: 0,
+        profit: 0,
         invoice: 0,
-        courier_number: ''
+        courier_number: "",
+        paid: 0,
     });
-    const setSellPrice = (e) => {
-        setData("sell_price", parseInt(e.target.value));
+    const setSellPrice = (e: ChangeEvent<HTMLInputElement>) => {
+        let sell = parseInt(e.target.value)
+        setData({
+            ...data,
+            ...{ sell_price: sell, profit: sell - item.buy_price },
+        });
     };
+
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        axios
+            .put(route("api.product-item.actions.courier", { id: item.id }), data)
+            .then((res) => {
+                onClose();
+                router.reload();
+            });
+    };
+
 
     return (
         <>
@@ -36,11 +58,16 @@ export default function CourierAction({ item }: { item: Productitem }) {
             <Modal radius="none" isOpen={isOpen} onOpenChange={onOpenChange}>
                 <ModalContent>
                     {(onClose) => (
-                        <form>
+                        <form onSubmit={handleSubmit}>
                             <ModalHeader className="flex flex-col gap-1">
                                 Courier
                             </ModalHeader>
                             <ModalBody>
+                                <div>
+                                    <p>Item: {item.name}</p>
+                                    <p>Buying Price: {item.buy_price}</p>
+                                    <p>Identity: {item.identity}</p>
+                                </div>
                                 <Input
                                     id="sell_price"
                                     name="sell_price"
@@ -52,14 +79,29 @@ export default function CourierAction({ item }: { item: Productitem }) {
                                 />
 
                                 <Input
-                                    id="benefit"
-                                    name="benefit"
-                                    label="Benefit"
+                                    id="profit"
+                                    name="profit"
+                                    label="Profit"
+                                    type="number"
+                                    radius="none"
+                                    value={data.profit.toString()}
+                                    onChange={(e) =>
+                                        setData(
+                                            "profit",
+                                            parseInt(e.target.value)
+                                        )
+                                    }
+                                    isRequired
+                                />
+                                <Input
+                                    id="paid"
+                                    name="paid"
+                                    label="Paid"
                                     type="number"
                                     radius="none"
                                     onChange={(e) =>
                                         setData(
-                                            "benefit",
+                                            "paid",
                                             parseInt(e.target.value)
                                         )
                                     }
@@ -77,12 +119,11 @@ export default function CourierAction({ item }: { item: Productitem }) {
                                             parseInt(e.target.value)
                                         )
                                     }
-                                    isRequired
                                 />
                                 <Input
                                     id="courier_number"
                                     name="courier_number"
-                                    label="Invoice"
+                                    label="Courier number"
                                     type="text"
                                     radius="none"
                                     onChange={(e) =>
@@ -91,7 +132,6 @@ export default function CourierAction({ item }: { item: Productitem }) {
                                             e.target.value
                                         )
                                     }
-                                    isRequired
                                 />
                             </ModalBody>
                             <ModalFooter>
@@ -108,7 +148,7 @@ export default function CourierAction({ item }: { item: Productitem }) {
                                     color="primary"
                                     type="submit"
                                 >
-                                    Sell Action
+                                    Courier Action
                                 </Button>
                             </ModalFooter>
                         </form>
