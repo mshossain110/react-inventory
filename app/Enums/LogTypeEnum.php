@@ -10,4 +10,5 @@ enum LogTypeEnum: string
     case COURIER_PRODUCT = 'COURIER PRODUCT';
     case TRANSFER_PRODUCT = 'TRANSFER PRODUCT';
     case BAD_PRODUCT = 'BAD PRODUCT';
+    case RETURN_PRODUCT = 'RETURN PRODUCT';
 }

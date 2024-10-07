@@ -53,6 +53,7 @@ export interface Productitem extends Base {
     status: string;
     buy_price: number;
     sell_price?: number;
+    profit?: number;
     sold_at?: Date;
     provider?: Provider;
     warehouse?: Warehouse;
@@ -66,4 +67,13 @@ export interface Applog extends Base {
     company: Company;
 }
 
-export type productTable = Omit<Product, 'productItems'> & Omit<Productitem, 'provider' | 'warehouse' | 'product'>
+export const  ProductSatus =  {
+    AVAILAVLE: 'available',
+    COURIER: 'courier',
+    BAD: 'bad',
+    SOLD: 'sold',
+    SERVICE: 'service',
+    PROVIDER: 'provider',
+}
+
+export type productTable = Omit<Product, 'id' | 'productItems'> & Omit<Productitem, 'provider' | 'warehouse' | 'product'> & {warehouse_name: string}

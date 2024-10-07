@@ -13,7 +13,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::all();
+        $companies = Company::with(['warehouses'])->get();
 
         return Inertia::render('Company/Index', [
             'companies' => $companies

@@ -7,6 +7,7 @@ import {
     SelectItem,
     ListboxSection,
 } from "@nextui-org/react";
+import { useSessionStorage } from "@reactuses/core";
 import axios from "axios";
 import React, { EventHandler, useEffect, useMemo, useState } from "react";
 
@@ -14,18 +15,22 @@ export default function WarehouseSelect(
     {warehouse, setWarehouse}: { warehouse: number; setWarehouse: React.ChangeEventHandler<HTMLSelectElement>}
 ) {
 
-    const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
+    const [warehouses, setWarehouses] = useSessionStorage<Warehouse[]>('warehouses', []);
 
     useEffect(() => {
-        if (warehouses.length) {
-            return;
-        }
+        
+        const timer = setTimeout(() => {
+            console.log(warehouses)
+            if (!warehouses?.length)
+                {
+                    axios.get("/api/warehouses")
+                    .then((response) => setWarehouses(response.data.data))
+                }
+        }, 5000)
 
-        axios
-            .get("/api/warehouses")
-            .then((response) => setWarehouses(response.data.data));
-
-    }, []);
+        return () => clearTimeout(timer);
+        
+    }, [])
 
     return (
         <Select
@@ -35,10 +40,9 @@ export default function WarehouseSelect(
             radius="none"
             value={warehouse}
             onChange={setWarehouse}
+            items={warehouses ? warehouses : undefined}
         >
-            {warehouses.map((wh) => (
-                <SelectItem key={wh.id}>{wh.name}</SelectItem>
-            ))}
+            {(wh) => <SelectItem key={wh.id}>{wh.name}</SelectItem> }
         </Select>
     );
 }

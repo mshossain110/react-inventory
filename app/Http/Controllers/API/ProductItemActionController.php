@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Actions\ProductActions\BadProductItemAction;
 use App\Actions\ProductActions\SoldProductItemAction;
+use App\Actions\ProductActions\ReturnProductItemAction;
 use App\Actions\ProductActions\CourierProductItemAction;
 use App\Actions\ProductActions\TransferProductItemAction;
 
@@ -56,5 +57,17 @@ class ProductItemActionController extends Controller
         $data = $request->all();
 
         app(TransferProductItemAction::class)->excute($productItem, $data);
+    }
+
+    public function return(ProductItem $productItem, Request $request)
+    {
+        $request->validate([
+            'note' => 'required',
+            'amount' => 'required|numeric',
+        ]);
+
+        $data = $request->all();
+
+        app(ReturnProductItemAction::class)->excute($productItem, $data);
     }
 }

@@ -8,6 +8,7 @@
   },
   "devDependencies": {
     "@heroicons/react": "^2.1.5",
+    "@reactuses/core": "^5.0.21",
     "@types/node": "^22.5.5",
     "@types/react": "^18.3.8",
     "@types/react-dom": "^18.3.0",

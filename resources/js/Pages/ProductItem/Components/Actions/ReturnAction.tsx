@@ -1,5 +1,6 @@
-import { useForm } from "@inertiajs/react";
-import { Productitem } from "@/types";
+import { useForm, router } from "@inertiajs/react";
+import { Productitem, productTable } from "@/types";
+import {FormEvent} from 'react'
 import {
     Modal,
     ModalContent,
@@ -9,17 +10,30 @@ import {
     Button,
     useDisclosure,
     Input,
+    Textarea,
 } from "@nextui-org/react";
-type badFrom = {
+import axios from "axios";
+type returnFrom = {
     note: string;
-    warehouse: number;
+    amount: number;
 };
-export default function ReturnAction({ item }: { item: Productitem }) {
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const { data, setData, post, processing, errors } = useForm<badFrom>({
+export default function ReturnAction({ item }: { item: productTable }) {
+    const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
+    const { data, setData, put, processing, errors } = useForm<returnFrom>({
         note: '',
-        warehouse: 0,
+        amount: 0,
     });
+
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        axios.put(route("api.product-item.actions.return", { id: item.id }))
+            .then(() => {
+                    onClose();
+                    router.reload();
+                
+            })
+    };
     return (
         <>
             <Button radius="none" size="sm" onPress={onOpen}>
@@ -28,17 +42,45 @@ export default function ReturnAction({ item }: { item: Productitem }) {
             <Modal radius="none" isOpen={isOpen} onOpenChange={onOpenChange}>
                 <ModalContent>
                     {(onClose) => (
-                        <form>
+                        <form onSubmit={handleSubmit}>
                             <ModalHeader className="flex flex-col gap-1">
-                                Replace
+                                Return
                             </ModalHeader>
                             <ModalBody>
-
-
-                                <p>Replace Wtih sold mobile and give option receive money</p>
-                                <p>Return Product</p>
-                                <p>Show Sell Price</p>
+                                <p>Product: {item.name}</p>
+                                <p>Sell Price: {item.sell_price}</p>
+                                <p>Sell Date: {item.sold_at}</p>
+                                <p>profit: {item.profit}</p>
+                                <p>Sold from: {item.warehouse_name}</p>
                                 <p>Given Amount</p>
+                                <Input
+                                    id="amount"
+                                    name="amount"
+                                    label="Given Amount"
+                                    type="number"
+                                    radius="none"
+                                    isRequired
+                                    onChange={(e) =>
+                                        setData(
+                                            "amount",
+                                            parseInt(e.target.value)
+                                        )
+                                    }
+                                />
+                                <Textarea
+                                    id="note"
+                                    name="note"
+                                    label="Note"
+                                    type="text"
+                                    radius="none"
+                                    isRequired
+                                    onChange={(e) =>
+                                        setData(
+                                            "note",
+                                            e.target.value
+                                        )
+                                    }
+                                />
                             </ModalBody>
                             <ModalFooter>
                                 <Button
@@ -54,7 +96,7 @@ export default function ReturnAction({ item }: { item: Productitem }) {
                                     color="primary"
                                     type="submit"
                                 >
-                                    Bad
+                                    Return
                                 </Button>
                             </ModalFooter>
                         </form>
